@@ -12,62 +12,77 @@
         "imports": {
           "@google/generative-ai": "https://esm.run/@google/generative-ai"
         }
-      }
+    }
 </script>
-  <script type="module">
-    // import * as generativeAI from '@google/generative-ai';
+<script type="module">
     import { GoogleGenerativeAI } from "@google/generative-ai";
+
     const key = 'AIzaSyBBN1DBDQvLqTGQWTa9QC2BfxL2Sjw8NAw';
     const genAI = new GoogleGenerativeAI(key);
+    let messageHistory = [];
 
-document.addEventListener('DOMContentLoaded', () => {
-    const inputField = document.querySelector('.input-field');
-    const sendButton = document.querySelector('.send-button');
-    const chatWindow = document.querySelector('.chat-window');
-    
-    const appendMessage = (message, className) => {
-        const messageDiv = document.createElement('div');
-        messageDiv.textContent = message;
-        messageDiv.className = className;
-        chatWindow.appendChild(messageDiv);
-        chatWindow.scrollTop = chatWindow.scrollHeight;
-        
-    };
-    
-    const sendMessage = () => {
-        const message = inputField.value.trim();
-        if (message) {
-            appendMessage(message, 'user-message');
-            //inputField.value = '';
-            
-            // Here you could add your code to send the message to the server
-            // and then wait for a response to call appendMessage with the 'response-message' class
-            run();
-        }
-    };
-  
-    
-    sendButton.addEventListener('click', sendMessage);
-    
-    inputField.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            sendMessage();
+    document.addEventListener('DOMContentLoaded', () => {
+        const inputField = document.querySelector('.input-field');
+        const sendButton = document.querySelector('.send-button');
+        const chatWindow = document.querySelector('.chat-window');
+        const newChatButton = document.getElementById('new-chat-btn');
+        const historyButton = document.getElementById('history-btn');
+
+        const appendMessage = (message, className) => {
+            const messageDiv = document.createElement('div');
+            messageDiv.textContent = message;
+            messageDiv.className = className;
+            chatWindow.appendChild(messageDiv);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+            if(className === 'user-message') {
+                messageHistory.push(`• ${message}`);
+            }
+        };
+
+        const sendMessage = () => {
+            let message = inputField.value.trim();
+            // Automatic capitalization
+            message = message.charAt(0).toUpperCase() + message.slice(1);
+            if (message) {
+                appendMessage(message, 'user-message');
+                run(message);
+            }
+            inputField.value = ''; // Clear input field after sending
+        };
+
+        const clearChat = () => {
+            chatWindow.innerHTML = '';
+        };
+
+        const showHistory = () => {
+            clearChat();
+            messageHistory.forEach(msg => appendMessage(msg, 'user-message'));
+        };
+
+        newChatButton.addEventListener('click', () => {
+            clearChat();
+            messageHistory = []; // Optionally clear history
+        });
+
+        historyButton.addEventListener('click', showHistory);
+
+        sendButton.addEventListener('click', sendMessage);
+
+        inputField.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        async function run(message) {
+            const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+            const result = await model.generateContent(message);
+            const response = await result.response;
+            const text = await response.text();
+            appendMessage(text, 'response-message');
+            console.log(text);
         }
     });
-
-    async function run() {
-        // For text-only input, use the gemini-pro model
-        const model = genAI.getGenerativeModel({ model: "gemini-pro"});
-        //const prompt = document.getElementById("MyRequest").value;
-        const prompt = inputField.value;
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        const text = response.text();
-        appendMessage(text, 'response-message');
-        //output.innerHTML = text;
-        console.log(text);
-    }
-});
 </script>
 
 <body>
