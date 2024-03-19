@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <link href="styles.css" rel="stylesheet"/>
+</head>
+
+<script type="importmap">
+    {
+        "imports": {
+          "@google/generative-ai": "https://esm.run/@google/generative-ai"
+        }
+      }
+</script>
+  <script type="module">
+    // import * as generativeAI from '@google/generative-ai';
+    import { GoogleGenerativeAI } from "@google/generative-ai";
+
+    const genAI = new GoogleGenerativeAI("AIzaSyBBN1DBDQvLqTGQWTa9QC2BfxL2Sjw8NAw");
+
+document.addEventListener('DOMContentLoaded', () => {
+    const inputField = document.querySelector('.input-field');
+    const sendButton = document.querySelector('.send-button');
+    const chatWindow = document.querySelector('.chat-window');
+    
+    const appendMessage = (message, className) => {
+        const messageDiv = document.createElement('div');
+        messageDiv.textContent = message;
+        messageDiv.className = className;
+        chatWindow.appendChild(messageDiv);
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+        
+    };
+    
+    const sendMessage = () => {
+        const message = inputField.value.trim();
+        if (message) {
+            appendMessage(message, 'user-message');
+            //inputField.value = '';
+            
+            // Here you could add your code to send the message to the server
+            // and then wait for a response to call appendMessage with the 'response-message' class
+            run();
+        }
+    };
+  
+    
+    sendButton.addEventListener('click', sendMessage);
+    
+    inputField.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
+
+    async function run() {
+        // For text-only input, use the gemini-pro model
+        const model = genAI.getGenerativeModel({ model: "gemini-pro"});
+        //const prompt = document.getElementById("MyRequest").value;
+        const prompt = inputField.value;
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        const text = response.text();
+        appendMessage(text, 'response-message');
+        //output.innerHTML = text;
+        console.log(text);
+    }
+});
+</script>
+
+<body>
+    <div class="grid-container">
+        <div class="left box-container">
+            <div id="Brand">
+                <img src="./images/ai.png" alt="Cloud AI Logo" class="logo"> <!-- Replace with your actual logo image -->
+            </div>
+            <div class="mid-section">
+                <button id="new-chat-btn" class="side-btn">
+                    <img src="./images/edit-3.png" alt="" class="icon"> 
+                    New Chat
+                </button> 
+                <hr class="line1"/>
+                <button id="history-btn" class="side-btn">
+                    <img src="./images/history.png" alt="" class="icon"> <!-- Replace with your actual history icon -->
+                    View All History
+                </button>
+                <!-- ...other buttons... -->
+            </div>
+            <div class="profile-section">
+                <img class="pic" src="images/profile.png" alt="profile">
+                <h4 class="name">Chelsy Mutua</h4>
+                <span>...</span>
+            </div>
+            
+            
+        </div>
+        <div class="right box-container">
+            <div class="chat-window">
+                <!-- Chat messages will appear here -->
+            </div>
+            <div class="input-area">
+                <input type="text" placeholder="Type your message..." class="input-field"/>
+                <button class="send-button"><img src="./images/message.png" alt="Send"/></button>
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>
