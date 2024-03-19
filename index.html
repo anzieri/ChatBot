@@ -17,8 +17,8 @@
   <script type="module">
     // import * as generativeAI from '@google/generative-ai';
     import { GoogleGenerativeAI } from "@google/generative-ai";
-
-    const genAI = new GoogleGenerativeAI("AIzaSyBBN1DBDQvLqTGQWTa9QC2BfxL2Sjw8NAw");
+    const key = 'AIzaSyBBN1DBDQvLqTGQWTa9QC2BfxL2Sjw8NAw';
+    const genAI = new GoogleGenerativeAI(key);
 
 document.addEventListener('DOMContentLoaded', () => {
     const inputField = document.querySelector('.input-field');
