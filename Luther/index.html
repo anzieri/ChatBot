@@ -8,119 +8,108 @@
 </head>
 
 <script type="importmap">
-    {
-        "imports": {
-          "@google/generative-ai": "https://esm.run/@google/generative-ai"
-        }
+{
+    "imports": {
+      "@google/generative-ai": "https://esm.run/@google/generative-ai"
     }
-</script>
-<script type="module">
-    import { GoogleGenerativeAI } from "@google/generative-ai";
-
-    const key = 'AIzaSyBBN1DBDQvLqTGQWTa9QC2BfxL2Sjw8NAw';
-    const genAI = new GoogleGenerativeAI(key);
-    let messageHistory = [];
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const inputField = document.querySelector('.input-field');
-        const sendButton = document.querySelector('.send-button');
-        const chatWindow = document.querySelector('.chat-window');
-        const newChatButton = document.getElementById('new-chat-btn');
-        const historyButton = document.getElementById('history-btn');
-
-        const appendMessage = (message, className) => {
-            const messageDiv = document.createElement('div');
-            messageDiv.textContent = message;
-            messageDiv.className = className;
-            chatWindow.appendChild(messageDiv);
-            chatWindow.scrollTop = chatWindow.scrollHeight;
-            if(className === 'user-message') {
-                messageHistory.push(`• ${message}`);
-            }
-        };
-
-        const sendMessage = () => {
-            let message = inputField.value.trim();
-            // Automatic capitalization
-            message = message.charAt(0).toUpperCase() + message.slice(1);
-            if (message) {
-                appendMessage(message, 'user-message');
-                run(message);
-            }
-            inputField.value = ''; // Clear input field after sending
-        };
-
-        const clearChat = () => {
-            chatWindow.innerHTML = '';
-        };
-
-        const showHistory = () => {
-            clearChat();
-            messageHistory.forEach(msg => appendMessage(msg, 'user-message'));
-        };
-
-        newChatButton.addEventListener('click', () => {
-            clearChat();
-            messageHistory = []; // Optionally clear history
-        });
-
-        historyButton.addEventListener('click', showHistory);
-
-        sendButton.addEventListener('click', sendMessage);
-
-        inputField.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
-        });
-
-        async function run(message) {
-            const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-            const result = await model.generateContent(message);
-            const response = await result.response;
-            const text = await response.text();
-            appendMessage(text, 'response-message');
-            console.log(text);
-        }
-    });
+}
 </script>
 
 <body>
     <div class="grid-container">
-        <div class="left box-container">
-            <div id="Brand">
-                <img src="./images/ai.png" alt="Cloud AI Logo" class="logo"> <!-- Replace with your actual logo image -->
-            </div>
-            <div class="mid-section">
-                <button id="new-chat-btn" class="side-btn">
-                    <img src="./images/edit-3.png" alt="" class="icon"> 
-                    New Chat
-                </button> 
-                <hr class="line1"/>
-                <button id="history-btn" class="side-btn">
-                    <img src="./images/history.png" alt="" class="icon"> <!-- Replace with your actual history icon -->
-                    View All History
-                </button>
-                <!-- ...other buttons... -->
-            </div>
-            <div class="profile-section">
-                <img class="pic" src="images/profile.png" alt="profile">
-                <h4 class="name">Chelsy Mutua</h4>
-                <span>...</span>
-            </div>
-            
-            
-        </div>
+        
         <div class="right box-container">
+            <div class="heading1">
+                <img src="../Images/cloud2.png" alt="cloud" class="cloud">
+                <p>CLOUD AI</p>
+            </div>
             <div class="chat-window">
                 <!-- Chat messages will appear here -->
             </div>
+            
             <div class="input-area">
-                <input type="text" placeholder="Type your message..." class="input-field"/>
-                <button class="send-button"><img src="./images/message.png" alt="Send"/></button>
+                <button id="new-chat-btn" class="side-btn">
+                    <img src="../Images/plus.png" alt="" class="icon"> 
+                </button> 
+                <input type="text" placeholder="Type your message..." class="input-field"  />
+                <button class="send-button" onclick='sendMessage()'>
+                    <img src="../Images/message.png" alt="Send" />
+                </button>
             </div>
         </div>
     </div>
+
+    <script type="module">
+        import { GoogleGenerativeAI } from "@google/generative-ai";
+        
+        const key = 'AIzaSyBBN1DBDQvLqTGQWTa9QC2BfxL2Sjw8NAw';
+        const genAI = new GoogleGenerativeAI(key);
+        let messageHistory = [];
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const inputField = document.querySelector('.input-field');
+            const chatWindow = document.querySelector('.chat-window');
+            const newChatButton = document.getElementById('new-chat-btn');
+            
+            const appendMessage = (message, className) => {
+                const messageDiv = document.createElement('div');
+                messageDiv.textContent = message;
+                messageDiv.className = className;
+                chatWindow.appendChild(messageDiv);
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+                if(className === 'user-message') {
+                    messageHistory.push(`• ${message}`);
+                }
+            };
+            
+            const sendMessage = async () => {
+                let message = inputField.value.trim();
+                message = message.charAt(0).toUpperCase() + message.slice(1);
+                if (message) {
+                    appendMessage(message, 'user-message');
+                    inputField.value = '';
+                    await run(message);
+                    
+                }
+            };
+            
+            const clearChat = () => {
+                chatWindow.innerHTML = '';
+                messageHistory = [];
+            };
+            
+            newChatButton.addEventListener('click', clearChat);
+            
+            inputField.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+            
+            async function run(message) {
+                try {
+                    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+                    const result = await model.generateContent(message);
+                    const response = await result.response;
+                    const text = await response.text();
+                    appendMessage(text, 'response-message');
+                } catch (error) {
+                    console.error("Error fetching AI response:", error);
+                }
+            }
+            function formatChatbotResponse(text) {
+        // Replace double asterisks with heading tags
+        let formattedText = text.replace(/\*\*\s(.+)/g, '<div class="heading">$1</div>');
+        
+        // Replace single asterisks with subheading tags
+        formattedText = formattedText.replace(/\*\s(.+)/g, '<div class="subheading">$1</div>');
+        
+        // Replace asterisks for bullet points
+        formattedText = formattedText.replace(/(?<!\*)\*(.+)/g, '<li>$1</li>').replace(/<\/li>\n/g, '</li>').replace(/^<li>/, '<ul><li>').replace(/<\/li>$/, '</li></ul>');
     
+        return formattedText;
+    }
+        });
+    </script>
 </body>
 </html>

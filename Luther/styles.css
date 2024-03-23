@@ -1,19 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+@keyframes backgroundZoom {
+    0% {
+      background-size: 100% 100%;
+    }
+    50% {
+      background-size: 150% 150%;
+    }
+    100% {
+      background-size: 100% 100%;
+    }
+  }
 body {
     margin: 0;
-    background-color: #20232e;
-    font-family: Arial, sans-serif;
+    padding: 0;
+    background-color: #5f2bdb;
+    font-family: 'Roboto', sans-serif;
+    height: 100%;
+    background-image: radial-gradient(
+    circle, 
+    #f0259b, 
+    #5f2bdb, 
+    #f4bde1, 
+    #fc77e5, 
+    #602adb
+  );
+  background-size: cover;
+  animation: backgroundZoom 10s infinite alternate ease-in-out;
+}
+
+.heading {
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+.subheading {
+    font-weight: bold;
+    font-size: 1.2em;
 }
 
 .grid-container {
     display: grid;
-    grid-template-columns: 1fr 3fr;
+    place-items: center;
     height: 100vh;
+    width: 100%;
+    margin: auto;
+  
+}
+.heading1{
+display: flex;
+justify-content: center;
+padding: 10px; 
+letter-spacing: 20px;
+font-weight: 500px;
+
+
 }
 #Brand {
     display: flex;
     justify-content: center;
     padding: 20px;
 }
+.cloud {
+    width: 50px;
+    height: 50px;
+    position: relative; /* Allows for positioning the element */
+    animation: enterFromLeft 2s ease forwards; /* Animation name, duration, timing function, fill mode */
+  }
+  
+  @keyframes enterFromLeft {
+    from {
+      left: -100%; /* Start from off-screen to the left */
+    }
+    to {
+      left: 0; /* End at the original position */
+    }
+  }
+  #new-chat-btn{
+margin: 10px;
+}
+  
+  
+  
+  
 
 .logo {
     /* Your logo image styles */
@@ -37,19 +106,30 @@ body {
 .side-btn {
     display: flex;
     align-items: center;
-    background: none;
+    background-image: linear-gradient(to right, #fc77e5, #602adb); 
     border: none;
+    font-weight: medium;
+    border-radius: 50%;
     color: white;
     font-size: medium;
     padding: 10px;
-    margin: 5px 0;
+    
     cursor: pointer;
 }
+@keyframes fadeBackground {
+    0% {
+      background-image: linear-gradient(to right, #fc77e5, #602adb);
+    }
+    100% {
+      background-image: linear-gradient(to right, #602adb, #fc77e5);
+    }
+  }
 
 .side-btn .icon {
-    margin-right: 8px;
-    width: 20px;
-    height: 20px;
+   padding: auto;
+    width: 30px;
+    height: 25px;
+    font-size: 1000px;
 }
 
 .profile-section {
@@ -80,11 +160,13 @@ span {
 
 .right {
     background-color: #343541;
-    border-radius: 10px;
+    border-radius: 40px;
     padding: 20px;
     color: white;
     display: flex;
     flex-direction: column;
+    width: 70%;
+    height: 80%;
 }
 
 .chat-window {
@@ -100,7 +182,7 @@ span {
     display: flex;
     align-items: center;
     padding: 10px;
-    background-color: #40414e;
+    /* background-color: #40414e; */
     border-radius: 10px;
 }
 
@@ -113,18 +195,21 @@ span {
     margin-right: 10px;
     color: white;
     background-color: #303136;
-    outline: none;
+  
 }
 
 .send-button {
-    background: transparent;
     border: none;
     cursor: pointer;
+    width: 30px;
+   
+    
 }
 
 .send-button img {
     width: 24px;
     height: 24px;
+    font-size: 10px;
 }
 
 .user-message, .response-message {
