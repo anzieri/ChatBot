@@ -26,6 +26,17 @@
             </div>
             <div class="chat-window">
                 <!-- Chat messages will appear here -->
+                <div class="centered-messages">
+                    <div class="message-bubble">
+                        <p>Do not provide sensitive Information like passwords, credit card numbers</p>
+                    </div>
+                    <div class="message-bubble">
+                        <p>This Bot could potentially hallucinate</p>
+                    </div>
+                    <div class="message-bubble">
+                        <p>The responses could be incorrect</p>
+                    </div>
+                </div>
             </div>
             
             <div class="input-area">
@@ -51,7 +62,30 @@
             const inputField = document.querySelector('.input-field');
             const chatWindow = document.querySelector('.chat-window');
             const newChatButton = document.getElementById('new-chat-btn');
-            
+            const bubbleMessages = document.querySelector('.centered-messages');
+    
+            // Function to hide bubble messages
+            function hideBubbleMessages() {
+                bubbleMessages.classList.add('hidden');
+            }
+    
+            // Function to show bubble messages
+            function showBubbleMessages() {
+                bubbleMessages.classList.remove('hidden');
+            }
+    
+            // Show bubble messages on page load
+            showBubbleMessages();
+    
+            // Function to handle typing event
+            function handleTyping() {
+                hideBubbleMessages();
+                inputField.removeEventListener('input', handleTyping);
+            }
+    
+            // Add event listener for typing
+            inputField.addEventListener('input', handleTyping);
+    
             const appendMessage = (message, className) => {
                 const messageDiv = document.createElement('div');
                 messageDiv.textContent = message;
@@ -70,7 +104,6 @@
                     appendMessage(message, 'user-message');
                     inputField.value = '';
                     await run(message);
-                    
                 }
             };
             
@@ -98,28 +131,29 @@
                     console.error("Error fetching AI response:", error);
                 }
             }
-            function formatChatbotResponse(text) {
-        // Replace double asterisks with heading tags
-        let formattedText = text.replace(/\*\*\s(.+)/g, '<div class="heading">$1</div>');
-        
-        // Replace single asterisks with subheading tags
-        formattedText = formattedText.replace(/\*\s(.+)/g, '<div class="subheading">$1</div>');
-        
-        // Replace asterisks for bullet points
-        formattedText = formattedText.replace(/(?<!\*)\*(.+)/g, '<li>$1</li>').replace(/<\/li>\n/g, '</li>').replace(/^<li>/, '<ul><li>').replace(/<\/li>$/, '</li></ul>');
     
-        return formattedText;
-    }
+            function formatChatbotResponse(text) {
+                // Replace double asterisks with heading tags
+                let formattedText = text.replace(/\*\*\s(.+)/g, '<div class="heading">$1</div>');
+                
+                // Replace single asterisks with subheading tags
+                formattedText = formattedText.replace(/\*\s(.+)/g, '<div class="subheading">$1</div>');
+                
+                // Replace asterisks for bullet points
+                formattedText = formattedText.replace(/(?<!\*)\*(.+)/g, '<li>$1</li>').replace(/<\/li>\n/g, '</li>').replace(/^<li>/, '<ul><li>').replace(/<\/li>$/, '</li></ul>');
+            
+                return formattedText;
+            }
         });
+    
         window.addEventListener('load', function() {
-        setTimeout(function() {
-        var preloader = document.getElementById("preloader");
-        if (preloader) {
-            preloader.style.display = "none";
-        }
+            setTimeout(function() {
+                var preloader = document.getElementById("preloader");
+                if (preloader) {
+                    preloader.style.display = "none";
+                }
             }, 4000);
-});
-
+        });
     </script>
 </body>
 </html>
