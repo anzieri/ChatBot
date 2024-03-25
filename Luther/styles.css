@@ -176,6 +176,7 @@ span {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    max-height: 800px;
 }
 
 .input-area {

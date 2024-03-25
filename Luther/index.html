@@ -63,6 +63,25 @@
             const chatWindow = document.querySelector('.chat-window');
             const newChatButton = document.getElementById('new-chat-btn');
             const bubbleMessages = document.querySelector('.centered-messages');
+
+            // function typeWriter(message, element, delay = 20) {
+            //     let index = 0;
+
+            //     // Clear the element
+            //     element.textContent = '';
+                
+            //     // Create a new 'typing' animation
+            //     let typing = setInterval(() => {
+            //         // Add the next character to the element
+            //         element.innerHTML += message.charAt(index);
+            //         index++;
+
+            //         // If the last character has been added, stop the 'typing' animation
+            //         if(index === message.length) {
+            //             clearInterval(typing);
+            //         }
+            //     }, delay);
+            // }
     
             // Function to hide bubble messages
             function hideBubbleMessages() {
@@ -88,7 +107,16 @@
     
             const appendMessage = (message, className) => {
                 const messageDiv = document.createElement('div');
-                messageDiv.textContent = message;
+                
+                message = message.replace(/\*\*(.*?)\*\*/g, '<b>$1</b> \n');
+                message = message.replace(/\*(.*?)\*/g, '<i>$1</i>');
+                message = message.replace(/\* (.*?)(\n|$)/g, '<li>$1</li>');
+                // message = message.replace(/\- (.*?)(\n|$)/g, '- $1 \n');
+                message = message.replace(/(\d+)\. (.*?)(\n|$)/g, '<ol>$2</ol>');
+                message = message.replace(/```(.*?)```/gs, '<code>$1</code>');
+                
+
+                messageDiv.innerHTML = message;
                 messageDiv.className = className;
                 chatWindow.appendChild(messageDiv);
                 chatWindow.scrollTop = chatWindow.scrollHeight;
@@ -129,21 +157,22 @@
                     appendMessage(text, 'response-message');
                 } catch (error) {
                     console.error("Error fetching AI response:", error);
+                    appendMessage("Sorry, I'm having trouble understanding you right now. Please try again later.", 'response-message');
                 }
             }
     
-            function formatChatbotResponse(text) {
-                // Replace double asterisks with heading tags
-                let formattedText = text.replace(/\*\*\s(.+)/g, '<div class="heading">$1</div>');
+        //     function formatChatbotResponse(text) {
+        //         // Replace double asterisks with heading tags
+        //         let formattedText = text.replace(/\*\*\s(.+)/g, '<div class="heading">$1</div>');
                 
-                // Replace single asterisks with subheading tags
-                formattedText = formattedText.replace(/\*\s(.+)/g, '<div class="subheading">$1</div>');
+        //         // Replace single asterisks with subheading tags
+        //         formattedText = formattedText.replace(/\*\s(.+)/g, '<div class="subheading">$1</div>');
                 
-                // Replace asterisks for bullet points
-                formattedText = formattedText.replace(/(?<!\*)\*(.+)/g, '<li>$1</li>').replace(/<\/li>\n/g, '</li>').replace(/^<li>/, '<ul><li>').replace(/<\/li>$/, '</li></ul>');
+        //         // Replace asterisks for bullet points
+        //         formattedText = formattedText.replace(/(?<!\*)\*(.+)/g, '<li>$1</li>').replace(/<\/li>\n/g, '</li>').replace(/^<li>/, '<ul><li>').replace(/<\/li>$/, '</li></ul>');
             
-                return formattedText;
-            }
+        //         return formattedText;
+        //     }
         });
     
         window.addEventListener('load', function() {
