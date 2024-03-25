@@ -16,6 +16,7 @@
 </script>
 
 <body>
+    <div id="preloader"></div>
     <div class="grid-container">
         
         <div class="right box-container">
@@ -110,6 +111,15 @@
         return formattedText;
     }
         });
+        window.addEventListener('load', function() {
+        setTimeout(function() {
+        var preloader = document.getElementById("preloader");
+        if (preloader) {
+            preloader.style.display = "none";
+        }
+            }, 4000);
+});
+
     </script>
 </body>
 </html>

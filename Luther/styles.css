@@ -265,4 +265,14 @@ span {
     background-color: grey; /* Grey color for the response message */
     align-self: flex-start; /* Aligns the response message to the left */
 }
+#preloader {
+    box-sizing: border-box;
+    background: #000 url(../Images/preload.gif) no-repeat center center;
+    background-size: 30%;
+    height: 100vh;
+    width: 100%;
+    position: fixed;
+    z-index: 100;
+  }
+
 
