@@ -1,4 +1,4 @@
-# AI ChatBot 
+# AI ChatBot 🤖
 
 Think ChatGPT but better. This AI Chatbot is called "Cloud AI" and is a simple web application that uses HTML, CSS and Javascript only. It integrates the uses of Google's Gemini 1.0 pro API which unlike OpenAI's ChatGPT has an unlimited number of tokens. 
 
@@ -11,3 +11,5 @@ Integration of the Gemini AI API can be found on their main site link https://ai
 A prompt is input into the textfield which is then sent to the API. The response is processed and a reply is received from the AI model in Markdown format. The text then has to be formatted appropriately to create a readable more user friendly look.
 
 Link to a hosted version of this link https://chatbot2-qmj5.onrender.com/
+
+Have Fun!🫡
