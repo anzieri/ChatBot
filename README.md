@@ -14,5 +14,5 @@ Link to a hosted version of this link https://chatbot2-qmj5.onrender.com/
 
 Have Fun!🫡
 
-![alt text]![image](https://github.com/anzieri/ChatBot/assets/88835282/6557996e-7111-4117-8f39-3d64e5dc3794)
+![image](https://github.com/anzieri/ChatBot/assets/88835282/6557996e-7111-4117-8f39-3d64e5dc3794)
 
